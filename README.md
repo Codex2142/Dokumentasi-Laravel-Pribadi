@@ -1,3 +1,4 @@
+
 # Dokumentasi Laravel Pribadi
 **Disclaimer:** 
 
@@ -55,28 +56,34 @@ sebelum membuat database dengan migration, hendaknya kita membuat rancangan terl
 |id|int|
 |nama_kota|string|
 |provinsi|string|
+
 ### Tabel Ortu
 |Nama Kolom| Tipe Data|
 |--|--|
 |id|int|
 |nama_ortu| string|
 |kota_id|int, FK|
+
+### Tabel Login
+|Nama Kolom| Tipe Data|
+|--|--|
+|Email|string|
+|password|string|
+|level|string|
+
 *bagi yang belum familiar dengan **enum**. enum ialah sebuah tipe data yang value nya dideklarasikan dari awal, contohnya **enum: laki / perempuan**. yang artinya value dari jenis_kelamin hanya ada 2, yaitu **laki dan perempuan**.  
 FK merupakan Foreign Key yang akan didapatkan dari tabel lain
-### Membuat Migration
+### 3. Membuat Migration
 untuk memudahkan membuat tabel secara singkat. buka file **.env**
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=database_abc  # Ubah nama database yang sesuai
+DB_USERNAME=root
+DB_PASSWORD=
+```
 
-    DB_CONNECTION=mysql
-    
-    DB_HOST=127.0.0.1
-    
-    DB_PORT=3306
-    
-    DB_DATABASE=database_abc
-    
-    DB_USERNAME=root
-    
-    DB_PASSWORD=
 silahkan diubah sesuai dengan keadaan kalian masing masing. jika sudah. jangan lupa save.
 
 kemudian buka terminal, shortcut :
@@ -93,133 +100,197 @@ php artisan make:migration create_siswa_table
 ````
 
 
-## Switch to another file
+#### Hasil Migration
+berikut ini adalah file yang terbentuk ketika menjalankan perintah make migration
+![Migration Folder](https://raw.githubusercontent.com/Codex2142/Dokumentasi-Laravel-Pribadi/refs/heads/main/images/database%20migration.png)
+Secara default, terdapat 3 tabel yang dibuatkan oleh laravel sendiri. antara lain
+> create_users_table
+> create_cache_table
+> create_jobs_table
 
-All your files and folders are presented as a tree in the file explorer. You can switch from one to another by clicking a file in the tree.
+sedangkan kita hanya membuat tabel seperti dibawah ini
+> create_siswa_table
+> create_kota_table
+> create_ortu_table
+> create_login_table
 
-## Rename a file
+berikut adalah contoh isi file migration, dalam kesempatan ini, saya akan menunjukkan **create_siswa_table**
 
-You can rename the current file by clicking the file name in the navigation bar or by clicking the **Rename** button in the file explorer.
+Tampilan Awal:
+```php
+<?php
 
-## Delete a file
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-You can delete the current file by clicking the **Remove** button in the file explorer. The file will be moved into the **Trash** folder and automatically deleted after 7 days of inactivity.
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('siswa', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
+        });
+    }
 
-## Export a file
-
-You can export the current file by clicking **Export to disk** in the menu. You can choose to export the file as plain Markdown, as HTML using a Handlebars template or as a PDF.
-
-
-# Synchronization
-
-Synchronization is one of the biggest features of StackEdit. It enables you to synchronize any file in your workspace with other files stored in your **Google Drive**, your **Dropbox** and your **GitHub** accounts. This allows you to keep writing on other devices, collaborate with people you share the file with, integrate easily into your workflow... The synchronization mechanism takes place every minute in the background, downloading, merging, and uploading file modifications.
-
-There are two types of synchronization and they can complement each other:
-
-- The workspace synchronization will sync all your files, folders and settings automatically. This will allow you to fetch your workspace on any other device.
-	> To start syncing your workspace, just sign in with Google in the menu.
-
-- The file synchronization will keep one file of the workspace synced with one or multiple files in **Google Drive**, **Dropbox** or **GitHub**.
-	> Before starting to sync files, you must link an account in the **Synchronize** sub-menu.
-
-## Open a file
-
-You can open a file from **Google Drive**, **Dropbox** or **GitHub** by opening the **Synchronize** sub-menu and clicking **Open from**. Once opened in the workspace, any modification in the file will be automatically synced.
-
-## Save a file
-
-You can save any file of the workspace to **Google Drive**, **Dropbox** or **GitHub** by opening the **Synchronize** sub-menu and clicking **Save on**. Even if a file in the workspace is already synced, you can save it to another location. StackEdit can sync one file with multiple locations and accounts.
-
-## Synchronize a file
-
-Once your file is linked to a synchronized location, StackEdit will periodically synchronize it by downloading/uploading any modification. A merge will be performed if necessary and conflicts will be resolved.
-
-If you just have modified your file and you want to force syncing, click the **Synchronize now** button in the navigation bar.
-
-> **Note:** The **Synchronize now** button is disabled if you have no file to synchronize.
-
-## Manage file synchronization
-
-Since one file can be synced with multiple locations, you can list and manage synchronized locations by clicking **File synchronization** in the **Synchronize** sub-menu. This allows you to list and remove synchronized locations that are linked to your file.
-
-
-# Publication
-
-Publishing in StackEdit makes it simple for you to publish online your files. Once you're happy with a file, you can publish it to different hosting platforms like **Blogger**, **Dropbox**, **Gist**, **GitHub**, **Google Drive**, **WordPress** and **Zendesk**. With [Handlebars templates](http://handlebarsjs.com/), you have full control over what you export.
-
-> Before starting to publish, you must link an account in the **Publish** sub-menu.
-
-## Publish a File
-
-You can publish your file by opening the **Publish** sub-menu and by clicking **Publish to**. For some locations, you can choose between the following formats:
-
-- Markdown: publish the Markdown text on a website that can interpret it (**GitHub** for instance),
-- HTML: publish the file converted to HTML via a Handlebars template (on a blog for example).
-
-## Update a publication
-
-After publishing, StackEdit keeps your file linked to that publication which makes it easy for you to re-publish it. Once you have modified your file and you want to update your publication, click on the **Publish now** button in the navigation bar.
-
-> **Note:** The **Publish now** button is disabled if your file has not been published yet.
-
-## Manage file publication
-
-Since one file can be published to multiple locations, you can list and manage publish locations by clicking **File publication** in the **Publish** sub-menu. This allows you to list and remove publication locations that are linked to your file.
-
-
-# Markdown extensions
-
-StackEdit extends the standard Markdown syntax by adding extra **Markdown extensions**, providing you with some nice features.
-
-> **ProTip:** You can disable any **Markdown extension** in the **File properties** dialog.
-
-
-## SmartyPants
-
-SmartyPants converts ASCII punctuation characters into "smart" typographic punctuation HTML entities. For example:
-
-|                |ASCII                          |HTML                         |
-|----------------|-------------------------------|-----------------------------|
-|Single backticks|`'Isn't this fun?'`            |'Isn't this fun?'            |
-|Quotes          |`"Isn't this fun?"`            |"Isn't this fun?"            |
-|Dashes          |`-- is en-dash, --- is em-dash`|-- is en-dash, --- is em-dash|
-
-
-## KaTeX
-
-You can render LaTeX mathematical expressions using [KaTeX](https://khan.github.io/KaTeX/):
-
-The *Gamma function* satisfying $\Gamma(n) = (n-1)!\quad\forall n\in\mathbb N$ is via the Euler integral
-
-$$
-\Gamma(z) = \int_0^\infty t^{z-1}e^{-t}dt\,.
-$$
-
-> You can find more information about **LaTeX** mathematical expressions [here](http://meta.math.stackexchange.com/questions/5020/mathjax-basic-tutorial-and-quick-reference).
-
-
-## UML diagrams
-
-You can render UML diagrams using [Mermaid](https://mermaidjs.github.io/). For example, this will produce a sequence diagram:
-
-```mermaid
-sequenceDiagram
-Alice ->> Bob: Hello Bob, how are you?
-Bob-->>John: How about you John?
-Bob--x Alice: I am good thanks!
-Bob-x John: I am good thanks!
-Note right of John: Bob thinks a long<br/>long time, so long<br/>that the text does<br/>not fit on a row.
-
-Bob-->Alice: Checking with John...
-Alice->John: Yes... John, how are you?
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('siswa');
+    }
+};
 ```
 
-And this will produce a flow chart:
+Pada function **up()**. cobalah memodifikasi sedikit dengan cara menambahkan kolom sesuai dengan informasi yang didapatkan sebelumnya. disini akan saya contohkan secara singkat
 
-```mermaid
-graph LR
-A[Square Rect] -- Link text --> B((Circle))
-A --> C(Round Rect)
-B --> D{Rhombus}
-C --> D
+```php
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('siswa', function (Blueprint $table) {
+            $table->id();
+            $table->string('nama_depan');
+            $table->string('nama_belakang');
+            $table->string('jenis_kelamin');
+            $table->string('agama');
+            $table->text('alamat');
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('siswa');
+    }
+};
 ```
+
+#### Breakdown Kode satu per satu
+```php
+public function up(): void //Fungsi untuk membuat tabel
+```
+
+```php
+public function down(): void // Fungsi untuk menghapus tabel jika ada
+```
+```php
+Schema::create('siswa',  function  (Blueprint $table)  {  
+	$table->id();  $table->string('nama_depan');  
+	$table->string('nama_belakang');  
+	$table->string('jenis_kelamin');  
+	$table->string('agama');  
+	$table->text('alamat');  
+	$table->timestamps();  
+	// Ini adalah Kolom pada tabel yang akan dibuat
+});
+```
+Lakukan hal yang serupa pada tabel yang lain ya
+
+#### Bagaimana jika ada tabel foreign key?
+contoh disini terdapat kasus tabel ortu memiliki relasi dengan tabel kota. maka jadi begini:
+
+> kota (1) to ortu (many)
+
+ortu hanya memiliki 1 kota, sedangkan kota dapat memiliki banyak ortu
+```php
+$table->unsignedBigInteger('kota_id'); //Baris ini membuat kolom dengan nama kota_id
+$table->foreign('kota_id')->references('id')->on('kota'); // kota_id mengambil value dari kolom (ID) di tabel (KOTA)
+```
+
+
+jika sudah mengisikan kolom pada migration, selanjutnya adalah melakukan migrasi ke MySQL dengan cara mengetikkan perintah
+```bash
+php artisan migrate
+```
+
+Untuk melihat hasilnya, silahkan membuka [localhost / 127.0.0.1 | phpMyAdmin 5.2.1](http://localhost/phpmyadmin/)
+![Berhasil Migrasi](https://raw.githubusercontent.com/Codex2142/Dokumentasi-Laravel-Pribadi/refs/heads/main/images/migration%20success.png)
+
+### 4. Membuat Models Database
+Mungkin beberapa dari kalian bertanya-tanya mengenai Models. sebenarnya models adalah penanggung jawab dari CRUD dari sebuah database. intinya gitu deh. atau mungkin seperti perumpamaan dibawah ini:
+
+-   **Database** adalah seluruh perpustakaan itu sendiri.
+-   **Tabel** dalam database adalah rak buku yang mengelompokkan buku berdasarkan kategori tertentu (misalnya: Rak Fiksi, Rak Sains, Rak Sejarah).
+-   **Model** adalah **petugas perpustakaan** yang bertugas mencari, menambahkan, menghapus, atau memperbarui informasi buku dalam rak.
+
+ok karena sudah paham. Langsung saja kita membuatnya
+```bash
+	php artisan make:model {nama_model}
+```
+atau seperti contoh dibawah ini
+```bash
+	php artisan make:model Siswa
+```
+
+jika sudah selesai dibuatkan. maka akan muncul tampilan default seperti dibawah ini
+
+```php
+<?php
+namespace  App\Models;
+use Illuminate\Database\Eloquent\Model;
+class  Siswa  extends  Model
+{
+
+  
+
+}
+```
+
+dalam pelatihan awal saat pembelajaran laravel. biasanya user hanya mendeklarasikan **table** dan **fillable** di dalam class Siswa extends Model
+```php
+protected  $table = 'siswa';
+protected  $fillable = [
+	'nama_depan',
+	'nama_belakang',
+	'jenis_kelamin',
+	'agama',
+	'alamat',
+];
+```
+artinya adalah:
+>table adalah nama tabel yang akan diawasi
+>fillable adalah nama kolom yang dapat diisikan, **pastikan sesuai dengan yang ada di migration sebelumnya**
+
+#### Bagaimana dengan Foreign Key?
+diingatkan sekali lagi:
+> kota (1) to ortu (many)
+
+ortu hanya memiliki 1 kota, sedangkan kota dapat memiliki banyak ortu
+
+maka kedua Model tersebut perlu ditambahkan dengan kode sebagai berikut
+
+**Model Ortu:**
+
+```php
+public  function  kota(){
+	return  $this->belongsTo(Kota::class, 'kota_id', 'id');
+}
+```
+Artinya, setiap **ortu** memiliki **satu kota** berdasarkan `kota_id` yang merujuk ke `id` di tabel **kota**
+
+**Model Kota:**
+```php
+public  function  ortu(){
+	return  $this->hasMany(Ortu::class, 'kota_id', 'id');
+}
+```
+Artinya, satu **kota** dapat memiliki **banyak ortu**, karena `id` di tabel **kota** direferensikan oleh banyak `kota_id` di tabel **ortu**
