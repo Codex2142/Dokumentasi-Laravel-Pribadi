@@ -1,4 +1,5 @@
 
+
 # Dokumentasi Laravel Pribadi
 **Disclaimer:** 
 
@@ -294,3 +295,57 @@ public  function  ortu(){
 }
 ```
 Artinya, satu **kota** dapat memiliki **banyak ortu**, karena `id` di tabel **kota** direferensikan oleh banyak `kota_id` di tabel **ortu**
+
+
+## Membuat Form Views 
+form views adalah tampilan yang digunakan dalam website. disini kalian akan menyajikan tampilan website serta form untuk CRUD dan Login. maka dari itu kalian usahakan untuk mendesain sebagus mungkin. untuk membuat viewsnya, kalian ketikkan perintah:
+1. Membuat halaman untuk **Read & Delete**
+```bash
+php artisan make:view siswa.read
+```
+2. Membuat halaman Edit
+```bash
+php artisan make:view siswa.edit
+```
+3. Membuat halaman Create
+```bash
+php artisan make:view siswa.create
+```
+
+***Penjelasan:** siswa.read memiliki arti bahwa file bernama *read.blade.php* berada di dalam folder *siswa*
+anda dalam melihat hasilnya di *resources/views*
+
+![Views](https://raw.githubusercontent.com/Codex2142/Dokumentasi-Laravel-Pribadi/refs/heads/main/images/views.png)
+
+### Unsur penting Views
+1. Read Views
+	Hal yang harus diperhatikan dalam membuat read views yaitu menampilkan seluruh data yang ada di database. yang artinya kita menampilkan data secara looping, dikarenakan banyaknya data yang akan ditampilkan
+	
+	maka dari itu kita gunakan @foreach yang diakhiri dengan @endforeach
+
+```html
+<!-- Start Loop -->
+@foreach ($siswa as $i)
+    <tr>
+        <td>{{ $loop->iteration }}</td>
+        <td>{{ $i->nama_depan }}</td>
+        <td>{{ $i->nama_belakang }}</td>
+        <td>{{ $i->jenis_kelamin }}</td>
+        <td>{{ $i->agama }}</td>
+        <td>{{ $i->alamat }}</td>
+        <td>{{ $i->created_at->format('d-m-Y H:i') }}</td>
+        <td>{{ $i->updated_at->format('d-m-Y H:i') }}</td>
+        <td>
+            <a href="{{ route('siswa.edit', $i->id) }}" class="btn btn-warning">Edit</a>
+        </td>
+        <td>
+            <form action="{{ route('siswa.delete', $i->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn btn-danger">Hapus</button>
+            </form>
+        </td>
+    </tr>
+@endforeach
+<!-- End Loop -->
+```
